@@ -1,0 +1,85 @@
+load("@io_bazel_rules_closure//closure:defs.bzl", "closure_js_binary", "closure_js_library")
+
+# The experiment flag is controlled in //depot/google3/java/com/google/wallet/boq/instantbuy/frontend/http/config/experiments.pi
+# Please make sure your new change here is pushed in the target environment before you flip the flag in experiments.pi.
+
+package(
+    default_visibility = ["//visibility:public"],
+    licenses = ["notice"],  # Apache 2.0
+)
+
+exports_files(["LICENSE"])
+
+closure_js_binary(
+    name = "pay",
+    deps = [
+        ":payjs",
+    ],
+)
+
+closure_js_binary(
+    name = "pay_simple",
+    compilation_level = "SIMPLE",
+    deps = [
+        ":payjs",
+    ],
+)
+
+closure_js_library(
+    name = "payjs",
+    srcs = [
+        "button.js",
+        "constants.js",
+        "element_injector.js",
+        "graypane.js",
+        "pay_externs.js",
+        "pay_frame_helper.js",
+        "payjs.js",
+        "payjs_async.js",
+        "payments_client_delegate_interface.js",
+        "payments_request_delegate.js",
+        "payments_web_activity_delegate.js",
+        "post_message_service.js",
+        "upi_handler.js",
+        "utils.js",
+        "validator.js",
+    ],
+    suppress = [
+        "JSC_INEXISTENT_PROPERTY",
+        "JSC_INVALID_OPERAND_TYPE",
+        "JSC_STRICT_INEXISTENT_PROPERTY",
+        "JSC_TYPE_MISMATCH",
+        "JSC_UNKNOWN_EXPR_TYPE",
+        "JSC_UNREACHABLE_CODE",
+        "JSC_UNUSED_PRIVATE_PROPERTY",
+    ],
+    deps = [
+        "//third_party/random_uuid:uuid",
+        "//third_party/web_activities:port",
+    ],
+)
+
+closure_js_library(
+    name = "payjs_externs",
+    srcs = [
+        "pay_externs.js",
+        "paymentsclient_externs.js",
+    ],
+)
+
+closure_js_library(
+    name = "payjs_validator",
+    srcs = [
+        "constants.js",
+        "validator.js",
+    ],
+    suppress = ["JSC_UNKNOWN_EXPR_TYPE"],
+)
+
+closure_js_library(
+    name = "utils",
+    srcs = [
+        "utils.js",
+    ],
+    deps = ["//third_party/javascript/random_uuid:uuid"],
+)
